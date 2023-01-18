@@ -1,8 +1,12 @@
 package com.bruno.cryptoapp.repository;
 
 import com.bruno.cryptoapp.entity.Coin;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@EnableAutoConfiguration
 public class CoinRepository {
 
     private static String INSERT = "insert into coin (name, price, quantity, datetime) values (?,?,?,?)";
