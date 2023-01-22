@@ -16,7 +16,7 @@ public class CoinRepository {
 
     private static String INSERT = "insert into coin (name, price, quantity, datetime) values (?,?,?,?)";
 
-    private static String SELECT_ALL = "select name, sum(quantity) as quantity from coin group by name";
+    private static String SELECT_ALL = "select name, sum(quantity) as quantity from coin group by name"; // vai trazer a soma da quantidade por cada nome de coin, senao a lista pode ficar muito grande, com todos os registros de cada coin. Dessa forma ele agrupa por name, e faz a soma total da quantidade por cada coin
 
     private JdbcTemplate jdbcTemplate;
 
