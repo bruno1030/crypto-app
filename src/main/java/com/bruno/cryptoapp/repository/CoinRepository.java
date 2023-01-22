@@ -1,5 +1,6 @@
 package com.bruno.cryptoapp.repository;
 
+import com.bruno.cryptoapp.dto.CoinDTO;
 import com.bruno.cryptoapp.entity.Coin;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,11 +36,11 @@ public class CoinRepository {
         return coin;
     }
 
-    public List<Coin> getAll(){
-        return jdbcTemplate.query(SELECT_ALL, new RowMapper<Coin>() {    // sao 2 parametros: a query, e o RowMapper
+    public List<CoinDTO> getAll(){
+        return jdbcTemplate.query(SELECT_ALL, new RowMapper<CoinDTO>() {    // sao 2 parametros: a query, e o RowMapper
             @Override
-            public Coin mapRow(ResultSet rs, int rowNum) throws SQLException {   // os resultados da tabela vem no rs
-                Coin coin = new Coin();
+            public CoinDTO mapRow(ResultSet rs, int rowNum) throws SQLException {   // os resultados da tabela vem no rs
+                CoinDTO coin = new CoinDTO();
                 coin.setName(rs.getString("name"));
                 coin.setQuantity(rs.getBigDecimal("quantity"));
 
