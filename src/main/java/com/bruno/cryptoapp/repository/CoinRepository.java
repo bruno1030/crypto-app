@@ -19,6 +19,8 @@ public class CoinRepository {
 
     private static String SELECT_ALL = "select name, sum(quantity) as quantity from coin group by name"; // vai trazer a soma da quantidade por cada nome de coin, senao a lista pode ficar muito grande, com todos os registros de cada coin. Dessa forma ele agrupa por name, e faz a soma total da quantidade por cada coin
 
+    private static String SELECT_BY_NAME = "select * from coin where name = ?";
+
     private JdbcTemplate jdbcTemplate;
 
     public CoinRepository(JdbcTemplate jdbcTemplate){
@@ -48,6 +50,22 @@ public class CoinRepository {
             }
             // o map vai iterar e fazer a tarefa acima pra todas as coins que retornarem do banco de dados
         });
+    }
+
+    public List<Coin> getByName(String name){
+        Object[] attr = new Object[]{ name };
+        return jdbcTemplate.query(SELECT_BY_NAME, new RowMapper<Coin>() {
+            @Override
+            public Coin mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Coin coin = new Coin();
+                coin.setId(rs.getInt("id"));
+                coin.setName(rs.getString("name"));
+                coin.setPrice(rs.getBigDecimal("price"));
+                coin.setQuantity(rs.getBigDecimal("quantity"));
+
+                return coin;
+            }
+        }, attr);    // aqui no finalzinho eh terceiro parametro do metodo query
     }
 
 }

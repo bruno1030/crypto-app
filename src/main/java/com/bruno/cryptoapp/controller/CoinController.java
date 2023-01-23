@@ -35,4 +35,14 @@ public class CoinController {
         return new ResponseEntity<>(coinRepository.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{name}")
+    public ResponseEntity getCoinByName(@PathVariable String name){
+        try{
+            return new ResponseEntity<>(coinRepository.getByName(name), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
