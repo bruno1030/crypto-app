@@ -21,6 +21,8 @@ public class CoinRepository {
 
     private static String SELECT_BY_NAME = "select * from coin where name = ?";
 
+    private static String DELETE = "delete from coin where id = ?";
+
     private JdbcTemplate jdbcTemplate;
 
     public CoinRepository(JdbcTemplate jdbcTemplate){
@@ -67,5 +69,17 @@ public class CoinRepository {
             }
         }, attr);    // aqui no finalzinho eh terceiro parametro do metodo query
     }
+
+    public String remove(int id){
+        int result = 0;
+        result = jdbcTemplate.update(DELETE, id);
+
+        if(result == 1) {
+            return "Removido com sucesso";
+        } else{
+            return "Nao foi possivel remover";
+        }
+
+    };
 
 }
