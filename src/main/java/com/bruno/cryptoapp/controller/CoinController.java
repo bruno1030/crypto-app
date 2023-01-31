@@ -2,6 +2,9 @@ package com.bruno.cryptoapp.controller;
 
 import com.bruno.cryptoapp.entity.Coin;
 import com.bruno.cryptoapp.repository.CoinRepository;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,5 +86,33 @@ public class CoinController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping
+    public ResponseEntity update(@RequestBody Coin coin){
+        try{
+            coin.setDateTime(new Timestamp(System.currentTimeMillis()));
+            return new ResponseEntity<Coin>(coinRepository.update(coin), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+    }
+
+
+    @PostMapping("/json")
+    public String stringToJson(@RequestBody String payload){    // teste aleatorio que fiz sobre JSONObject (para work)
+
+        //JSONParser parser = new JSONParser(payload);
+
+        try{
+            JSONObject jsonObject = new JSONObject(payload);
+            String texto = "xxx";
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        String texto = "xxx";
+
+        return "ok";
+    };
 
 }

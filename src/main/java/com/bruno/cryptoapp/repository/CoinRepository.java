@@ -1,6 +1,6 @@
 package com.bruno.cryptoapp.repository;
 
-import com.bruno.cryptoapp.dto.CoinDTO;
+import com.bruno.cryptoapp.dto.CoinTransationDTO;
 import com.bruno.cryptoapp.entity.Coin;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +23,8 @@ public class CoinRepository {
 
     private static String DELETE = "delete from coin where id = ?";
 
+    private static String UPDATE = "update coin set name = ?, price = ?, quantity = ? where id = ?";
+
     private JdbcTemplate jdbcTemplate;
 
     public CoinRepository(JdbcTemplate jdbcTemplate){
@@ -40,11 +42,11 @@ public class CoinRepository {
         return coin;
     }
 
-    public List<CoinDTO> getAll(){
-        return jdbcTemplate.query(SELECT_ALL, new RowMapper<CoinDTO>() {    // sao 2 parametros: a query, e o RowMapper
+    public List<CoinTransationDTO> getAll(){
+        return jdbcTemplate.query(SELECT_ALL, new RowMapper<CoinTransationDTO>() {    // sao 2 parametros: a query, e o RowMapper
             @Override
-            public CoinDTO mapRow(ResultSet rs, int rowNum) throws SQLException {   // os resultados da tabela vem no rs
-                CoinDTO coin = new CoinDTO();
+            public CoinTransationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {   // os resultados da tabela vem no rs
+                CoinTransationDTO coin = new CoinTransationDTO();
                 coin.setName(rs.getString("name"));
                 coin.setQuantity(rs.getBigDecimal("quantity"));
 
@@ -79,7 +81,17 @@ public class CoinRepository {
         } else{
             return "Nao foi possivel remover";
         }
+    }
 
-    };
+    public Coin update(Coin coin){
+        Object[] attributes = new Object[]{
+                coin.getName(),
+                coin.getPrice(),
+                coin.getQuantity(),
+                coin.getId()
+        };
+        jdbcTemplate.update(UPDATE, attributes);
+        return coin;
+    }
 
 }
