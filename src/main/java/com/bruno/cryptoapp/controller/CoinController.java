@@ -3,6 +3,7 @@ package com.bruno.cryptoapp.controller;
 import com.bruno.cryptoapp.entity.Coin;
 import com.bruno.cryptoapp.repository.CoinRepository;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/coin")
+@Slf4j
 public class CoinController {
 
     private CoinRepository coinRepository;
@@ -97,14 +103,31 @@ public class CoinController {
         }
     }
 
+    String NOME = "Nome deve ser String";
+    String PRICE = "Nome deve ser numerico (decimal)";
+    String QUANTITY = "Nome deve ser numerico (decimal)";
+    String FLAG = "Nome deve ser numerico (decimal)";
 
     @PostMapping("/json")
     public String stringToJson(@RequestBody String payload){    // teste aleatorio que fiz sobre JSONObject (para work)
 
-        //JSONParser parser = new JSONParser(payload);
+//        List<Object[]> objsTeste = new ArrayList<>();
+//        objsTeste.add(new Object[]{"name", });
 
         try{
             JSONObject jsonObject = new JSONObject(payload);
+
+            List<MessageObject> objetos = new ArrayList<>();
+            objetos.add(new MessageObject("name", "String ('a' ou 'r')", true, NOME));
+            objetos.add(new MessageObject("price", "numerico (Double ou Integer)", false, PRICE));
+            objetos.add(new MessageObject("quantity", "numerico (Double/Integer)", true, QUANTITY));
+            objetos.add(new MessageObject("flag", "String ('s' ou 'n')", false, FLAG));
+
+            for (int i = 0; i < objetos.size(); i++) {
+                if(!objetos.get(i).isNullable() && !jsonObject.has(objetos.get(i).getName())){
+                    System.out.println(objetos.get(i).getMensagemErro());
+                }
+            }
             String texto = "xxx";
         }catch (Exception e){
             e.printStackTrace();
