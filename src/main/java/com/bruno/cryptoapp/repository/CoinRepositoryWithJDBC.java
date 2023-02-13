@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @EnableAutoConfiguration
-public class CoinRepository {
+public class CoinRepositoryWithJDBC {
 
     private static String INSERT = "insert into coin (name, price, quantity, datetime) values (?,?,?,?)";
 
@@ -27,7 +27,7 @@ public class CoinRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public CoinRepository(JdbcTemplate jdbcTemplate){
+    public CoinRepositoryWithJDBC(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 

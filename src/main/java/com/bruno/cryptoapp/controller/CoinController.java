@@ -1,7 +1,9 @@
 package com.bruno.cryptoapp.controller;
 
+import com.bruno.cryptoapp.controller.domain.ConsultaEstado;
 import com.bruno.cryptoapp.entity.Coin;
 import com.bruno.cryptoapp.repository.CoinRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
@@ -11,7 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,6 +119,13 @@ public class CoinController {
     @PostMapping("/json")
     public String stringToJson(@RequestBody String payload){    // teste aleatorio que fiz sobre JSONObject (para work)
 
+        BigDecimal taxa = new BigDecimal("2222.99");
+
+        if(taxa.compareTo(new BigDecimal("999.99")) == 1)   // se taxa eh maior que 999.99
+            taxa = new BigDecimal(999.99);
+
+        System.out.println(taxa);
+
 //        List<Object[]> objsTeste = new ArrayList<>();
 //        objsTeste.add(new Object[]{"name", });
 
@@ -137,5 +152,39 @@ public class CoinController {
 
         return "ok";
     };
+
+
+
+
+    @GetMapping("/estados")
+    public ResponseEntity<ConsultaEstado> getEstados(){
+        ObjectMapper mapper = new ObjectMapper();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(new URI("https://servicodados.ibge.gov.br/api/v1/localidades/estados/33"))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            ConsultaEstado body = mapper.readValue(response.body(), ConsultaEstado.class);
+
+            return new ResponseEntity<ConsultaEstado>(body, HttpStatus.OK);
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return new ResponseEntity<ConsultaEstado>(ConsultaEstado.builder().build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<ConsultaEstado>(ConsultaEstado.builder().build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new ResponseEntity<ConsultaEstado>(ConsultaEstado.builder().build(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
 }
