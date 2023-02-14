@@ -1,15 +1,12 @@
 package com.bruno.cryptoapp.controller;
 
 import com.bruno.cryptoapp.controller.domain.ConsultaEstado;
-import com.bruno.cryptoapp.repository.CoinRepository;
+import com.bruno.cryptoapp.repository.CoinRepositoryWithJPA;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -17,13 +14,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class CoinControllerTest {
 
     @Mock
-    CoinRepository repository;
+    CoinRepositoryWithJPA repository;
 
     @Mock
     HttpRequest request;

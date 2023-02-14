@@ -2,11 +2,9 @@ package com.bruno.cryptoapp.controller;
 
 import com.bruno.cryptoapp.controller.domain.ConsultaEstado;
 import com.bruno.cryptoapp.entity.Coin;
-import com.bruno.cryptoapp.repository.CoinRepository;
+import com.bruno.cryptoapp.repository.CoinRepositoryWithJPA;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -22,16 +20,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/coin")
 @Slf4j
 public class CoinController {
 
-    private CoinRepository coinRepository;
+    private CoinRepositoryWithJPA coinRepository;
 
     @Bean
     public Coin init(){
@@ -60,7 +56,7 @@ public class CoinController {
         return c1;
     }
 
-    public CoinController(CoinRepository coinRepository){
+    public CoinController(CoinRepositoryWithJPA coinRepository){
         this.coinRepository = coinRepository;
     }
 
@@ -84,7 +80,7 @@ public class CoinController {
     @GetMapping("/{name}")
     public ResponseEntity getCoinByName(@PathVariable String name){
         try{
-            return new ResponseEntity<>(coinRepository.getByName(name), HttpStatus.OK);
+            return null; //new ResponseEntity<>(coinRepository.getByName(name), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,7 +90,7 @@ public class CoinController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id){
         try{
-            return new ResponseEntity<String>(coinRepository.remove(id), HttpStatus.OK);
+            return null; //new ResponseEntity<String>(coinRepository.remove(id), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
