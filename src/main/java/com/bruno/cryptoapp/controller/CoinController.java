@@ -122,9 +122,6 @@ public class CoinController {
 
         System.out.println(taxa);
 
-//        List<Object[]> objsTeste = new ArrayList<>();
-//        objsTeste.add(new Object[]{"name", });
-
         try{
             JSONObject jsonObject = new JSONObject(payload);
 
