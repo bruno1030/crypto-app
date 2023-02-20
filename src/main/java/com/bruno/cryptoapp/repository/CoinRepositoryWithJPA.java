@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -26,28 +27,20 @@ public class CoinRepositoryWithJPA {
         return coin;
     }
 
+    // nao foi necessario colocar @Transactional pois esse metodo getAll nao faz nenhuma alteracao, soh faz consulta, diferente do insert e update
     public List<CoinTransationDTO> getAll(){
         String jpql = "select new com.bruno.cryptoapp.dto.CoinTransationDTO(c.name, sum(c.quantity)) from Coin c group by c.name";
         TypedQuery<CoinTransationDTO> query = entityManager.createQuery(jpql, CoinTransationDTO.class);
         return query.getResultList();      // nesse resultList vem uma lista com as transacoes
     }
 
-//    public List<Coin> getByName(String name){
-//        Object[] attr = new Object[]{ name };
-//        return jdbcTemplate.query(SELECT_BY_NAME, new RowMapper<Coin>() {
-//            @Override
-//            public Coin mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                Coin coin = new Coin();
-//                coin.setId(rs.getInt("id"));
-//                coin.setName(rs.getString("name"));
-//                coin.setPrice(rs.getBigDecimal("price"));
-//                coin.setQuantity(rs.getBigDecimal("quantity"));
-//
-//                return coin;
-//            }
-//        }, attr);    // aqui no finalzinho eh terceiro parametro do metodo query
-//    }
-//
+    public List<Coin> getByName(String name){
+        String jpql = "select c from Coin c where c.name like :name";
+        TypedQuery<Coin> query = entityManager.createQuery(jpql, Coin.class);   // aqui eu passo a query (jpql), e a entidade que vai ser mapeada (Coin.class)
+        query.setParameter("name", "%" + name + "%");
+        return query.getResultList();
+    }
+
 //    public String remove(int id){
 //        int result = 0;
 //        result = jdbcTemplate.update(DELETE, id);
