@@ -88,12 +88,14 @@ public class CoinController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id){
+    public ResponseEntity delete(@PathVariable int id){
+        boolean response = false;
         try{
-            return null; //new ResponseEntity<String>(coinRepository.remove(id), HttpStatus.OK);
+            response = coinRepository.remove(id);
+            return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         }
     }
 

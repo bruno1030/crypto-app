@@ -27,7 +27,7 @@ public class CoinRepositoryWithJPA {
         return coin;
     }
 
-    // nao foi necessario colocar @Transactional pois esse metodo getAll nao faz nenhuma alteracao, soh faz consulta, diferente do insert e update
+    // nao foi necessario colocar @Transactional pois esse metodo getAll nao faz nenhuma alteracao, soh faz consulta, diferente do insert, do delete e do update, esses sim tem o @Transactional
     public List<CoinTransationDTO> getAll(){
         String jpql = "select new com.bruno.cryptoapp.dto.CoinTransationDTO(c.name, sum(c.quantity)) from Coin c group by c.name";
         TypedQuery<CoinTransationDTO> query = entityManager.createQuery(jpql, CoinTransationDTO.class);
@@ -41,16 +41,17 @@ public class CoinRepositoryWithJPA {
         return query.getResultList();
     }
 
-//    public String remove(int id){
-//        int result = 0;
-//        result = jdbcTemplate.update(DELETE, id);
-//
-//        if(result == 1) {
-//            return "Removido com sucesso";
-//        } else{
-//            return "Nao foi possivel remover";
-//        }
-//    }
+    @Transactional
+    public boolean remove(int id){
+        Coin coin = entityManager.find(Coin.class, id);   // 2 parametros no find: a entidade que estou indo buscar no banco, e a chave primaria necessaria pra fazer a pesquisa no banco
+
+        if(!entityManager.contains(coin)){
+            coin = entityManager.merge(coin);
+        }
+
+        entityManager.remove(coin);
+        return true;
+    }
 
     @Transactional
     public Coin update(Coin coin){
